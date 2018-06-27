@@ -3,7 +3,7 @@
 // @description Use info from WME to automatically fill out related forms
 // @namespace
 // @version     1.4.2
-// @homepage    
+// @homepage
 // @supportURL
 // @include     https://www.waze.com/editor
 // @include     /^https:\/\/(www|beta)\.waze\.com\/(?!user\/)(.{2,6}\/)?editor.*$/
@@ -537,10 +537,10 @@
             return;
         }
 
-        forms = [
+        forms = [{
                 //https://docs.google.com/forms/d/e/1FAIpQLSeuWTPmaQRQrUMHr9FbfMYU9IPY0lV5TRtVb87D-ib5MfXaQg/viewform?usp=pp_url&entry.1553765347=username&entry.1264424583=CLOSED&entry.1811077109=permalink&entry.792657790=Two-Way&entry.345142186=reason&entry.1102521735=2018-06-26+00:00&entry.2015424420=street&entry.1547375393=street&entry.1335391716=street&entry.1867193205=MI&entry.1714138473=county&entry.1803937317=source&entry.1648634142=notes//
-                name: "MI Weather Closure Sheet"
-                url: "https://docs.google.com/forms/d/e/1FAIpQLSeuWTPmaQRQrUMHr9FbfMYU9IPY0lV5TRtVb87D-ib5MfXaQg/viewform"
+                name: "MI Weather Closure Sheet",
+                url: "https://docs.google.com/forms/d/e/1FAIpQLSeuWTPmaQRQrUMHr9FbfMYU9IPY0lV5TRtVb87D-ib5MfXaQg/viewform",
                 fields: {
                   username: "1553765347",
                   closureStatus: "1264424583",
@@ -556,7 +556,7 @@
                   source: "1803937317",
                   notes: "1648634142"
                         }
-
+                }
 
           /*{
                 //https://docs.google.com/forms/d/e/1FAIpQLSduBiLMhbg6nRpsEVCTcVbV4eWmHDXdIKGtuaOvzy6NZLbSgw/viewform?entry.1553765347=username&entry.1264424583=CLOSED&entry.1811077109=permalink&entry.792657790=Two-Way&entry.345142186=reason&entry.1102521735=2016-09-20+03:00&entry.2015424420=street+name&entry.1547375393=from+street&entry.1335391716=to+street&entry.1867193205=SC&entry.1714138473=county&entry.1803937317=source&entry.1648634142=notes
