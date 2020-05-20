@@ -2,7 +2,7 @@
 // @name        MI Form Filler
 // @description Use info from WME to automatically fill out related forms
 // @namespace
-// @version     1.4.2
+// @version     1.4.3
 // @homepage
 // @supportURL
 // @include     https://www.waze.com/editor
@@ -254,7 +254,7 @@
         return cityName;
     }
 
-    function ff_getCounty(selection) {
+/*    function ff_getCounty(selection) {
         var county = "";
         var center = W.map.center.clone().transform(W.map.projection.projCode, W.map.displayProjection.projCode);
         //formfiller_log("Getting county for "+center.lat.toString()+","+center.lon.toString());
@@ -283,8 +283,8 @@
         xhr.send(null);
         return county;
 
-        //Async call. Figure this out!
-        /*return $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng="+center.lat+","+center.lon, function(data) {
+       // Async call. Figure this out!
+        return $.getJSON("https://maps.googleapis.com/maps/api/geocode/json?latlng="+center.lat+","+center.lon, function(data) {
         if (data.status === "OK")
     {
         var addrComps = data.results[0].address_components;
@@ -304,8 +304,8 @@
         formfiller_log("Got county");
         formfiller_log(county);
         return county;
-        });*/
-    }
+        });
+    } */
 
     function ff_closureActive(selection) {
         var i;
@@ -368,19 +368,38 @@
         //https://www.waze.com/editor/?env=usa&lon=-79.79248&lat=32.86150&layers=12709&zoom=5&mode=0&mapProblemFilter=1&mapUpdateRequestFilter=0&venueFilter=0&venues=183632201.1836387542.3102948
         var permalink = "https://www.waze.com/editor/?",
             segIDs = [];
-        var latLon = W.map.center.clone().transform(W.map.projection.projCode, W.map.displayProjection.projCode);
+        var latLon = W.map.getOLMap().center.clone().transform(W.map.getOLMap().projection.projCode, W.map.getOLMap().displayProjection.projCode);
         var lat = latLon.lat,
             lon = latLon.lon;
-        var env = W.location.code;
+        var env = W.location ? W.location.code : W.app.getAppRegionCode();
         var type = "segments";
         var zoom = W.map.zoom;
-        var zoomToRoadType = W.Config.segments.zoomToRoadType;
+        var zoomToRoadType = function (e) {
+            switch (e) {
+                case 0:
+                case 1:
+                    return [];
+                case 2:
+                    return [2, 3, 4, 6, 7, 15];
+                case 3:
+                    return [2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                default:
+                    return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+            }
+        };
         var i;
 
         //To get lat and long centered on segment
         if (selection.length === 1) {
             latLon = selection[0].model.getCenter().clone();
-            latLon.transform(W.map.projection.projCode, W.map.displayProjection.projCode);
+            latLon.transform(W.map.getOLMap().projection.projCode, W.map.getOLMap().displayProjection.projCode);
             lat = latLon.y;
             lon = latLon.x;
         }
@@ -389,7 +408,7 @@
             var segment = selection[i].model;
             if (segment.type === "segment") {
                 segIDs.push(segment.attributes.id);
-                if (zoomToRoadType[zoom] !== -1 && zoomToRoadType[zoom].indexOf(segment.attributes.roadType) === -1) {
+                if (zoomToRoadType(zoom) === 0 || zoomToRoadType(zoom).indexOf(segment.attributes.roadType) === -1) {
                     alert("This zoom level (" + zoom.toString() + ") cannot be used for this road type! Please increase your zoom:\n" +
                         "Streets: 4+\nOther drivable and Non-drivable: 3+\nHighways and PS: 2+");
                     formfiller_log("Zoom level not correct for segment: " + zoom.toString() + " " + segment.attributes.roadType.toString());
@@ -474,9 +493,9 @@
             case "state":
                 formValues[key] = ff_getState(selection);
                 break;
-            case "county":
+       /*  case "county":
                 formValues.county = ff_getCounty(selection);
-                break;
+                break; */
             case "city":
                 formValues[key] = ff_getCity(selection);
                 break;
